@@ -188,7 +188,7 @@ class Favicon
         // Try /favicon.ico first.
         if ($checkDefault) {
             $info = $this->info("{$url}/favicon.ico");
-            if ($info['status'] == '200') {
+            if ($info !== false && $info['status'] == '200') {
                 $favicon = $info['url'];
             }
         }
