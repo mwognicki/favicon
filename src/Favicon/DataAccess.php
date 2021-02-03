@@ -19,7 +19,7 @@ class DataAccess
     {
         $this->setContext();
         $headers = @get_headers($url, 1);
-        return is_array($headers) ? array_change_key_case($headers) : array();
+        return is_array($headers) ? array_change_key_case($headers) : [];
     }
     
     public function saveCache($file, $data)
@@ -35,16 +35,16 @@ class DataAccess
     private function setContext()
     {
         stream_context_set_default(
-            array(
-                'http' => array(
+            [
+                'http' => [
                     'method' => 'GET',
                     'follow_location' => 0,
                     'max_redirects' => 1,
                     'timeout' => 10,
                     'header' => 'User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:20.0; Favicon; ' .
                                 '+https://github.com/ArthurHoaro/favicon) Gecko/20100101 Firefox/32.0\r\n',
-                )
-            )
+                ]
+            ]
         );
     }
 }
