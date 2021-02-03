@@ -11,12 +11,12 @@ class Favicon
     protected $cacheTimeout;
     protected $dataAccess;
 
-    public function __construct($args = array())
+    public function __construct($args = [])
     {
         if (isset($args['url'])) {
             $this->url = $args['url'];
         }
-        
+
         $this->cacheDir = __DIR__ . '/../../resources/cache';
         $this->cacheTimeout = 604800;
         $this->dataAccess = new DataAccess();
@@ -29,7 +29,7 @@ class Favicon
      *
      * @param array $args
      */
-    public function cache($args = array())
+    public function cache($args = [])
     {
         if (isset($args['dir'])) {
             $this->cacheDir = $args['dir'];
@@ -68,7 +68,7 @@ class Favicon
         if (!isset($url['host'])) {
             return false;
         }
-        
+
         $return .= $url['host'];
 
         // Port
@@ -90,9 +90,9 @@ class Favicon
         if (empty($url) || $url === false) {
             return false;
         }
-        
+
         $max_loop = 5;
-        
+
         // Discover real status by following redirects.
         $loop = true;
         while ($loop && $max_loop-- > 0) {
@@ -101,12 +101,12 @@ class Favicon
                 return false;
             }
             $exploded = explode(' ', $headers[0]);
-            
+
             if (!isset($exploded[1])) {
                 return false;
             }
             list(,$status) = $exploded;
-            
+
             switch ($status) {
                 case '301':
                 case '302':
@@ -121,9 +121,9 @@ class Favicon
             }
         }
 
-        return array('status' => $status, 'url' => $url);
+        return ['status' => $status, 'url' => $url];
     }
-    
+
     public function endRedirect($url)
     {
         $out = $this->info($url);
@@ -176,15 +176,15 @@ class Favicon
                 return empty($favicon) ? false : $favicon;
         }
     }
-    
+
     private function getFavicon($url, $checkDefault = true)
     {
         $favicon = false;
-        
+
         if (empty($url)) {
             return false;
         }
-        
+
         // Try /favicon.ico first.
         if ($checkDefault) {
             $info = $this->info("{$url}/favicon.ico");
@@ -205,7 +205,7 @@ class Favicon
                 $favicon = 'https:' . $favicon;
             }
         }
-        
+
         // Make sure the favicon is an absolute URL.
         if ($favicon && filter_var($favicon, FILTER_VALIDATE_URL) === false) {
             $favicon = rtrim($url, '/') . '/' . ltrim($favicon, '/');
@@ -258,13 +258,13 @@ class Favicon
     {
         $html = $this->dataAccess->retrieveUrl("{$url}/");
         preg_match('!<head.*?>.*</head>!ims', $html, $match);
-        
+
         if (empty($match) || count($match) == 0) {
             return false;
         }
-        
+
         $head = $match[0];
-        
+
         $dom = new \DOMDocument();
         // Use error suppression, because the HTML might be too malformed.
         if (@$dom->loadHTML($head)) {
@@ -325,9 +325,9 @@ class Favicon
 
     private function checkImageMType($url)
     {
-        
+
         $fileContent = $this->dataAccess->retrieveUrl($url);
-        
+
         return $this->checkImageMTypeContent($fileContent);
     }
 
@@ -348,7 +348,7 @@ class Favicon
 
         return $isImage;
     }
-    
+
     /**
      * @return mixed
      */
