@@ -209,11 +209,9 @@ class Favicon
 
         // Make sure the favicon is an absolute URL.
         if ($favicon && filter_var($favicon, FILTER_VALIDATE_URL) === false) {
-
             // Make sure that favicons starting with "/" get concatenated with host instead of full URL
             if($favicon[0] === '/') {
-                $parsed = parse_url($url);
-                $favicon = $parsed['scheme'] . '://' . $parsed['host'] . $favicon;
+                $favicon = $this->baseUrl($url) . ltrim($favicon, '/');
             } else {
                 $favicon = rtrim($url, '/') . '/' . ltrim($favicon, '/');
             }
